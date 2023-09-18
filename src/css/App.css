@@ -1,0 +1,21 @@
+:root{
+  --purplebg:#030014;
+}
+
+@font-face {
+  font-family: aldo;
+  src: url(assets/AldotheApache.ttf);
+}
+
+body{
+  background-color: var(--purplebg);
+  color:#cfced2;
+  width: 80vw;
+  padding: 0px 10vw;
+  overflow-x:hidden;
+}
+
+@media screen and (max-width:1400px) {
+  body{width: 100vw ;padding: 0px;}
+}
+
