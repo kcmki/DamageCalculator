@@ -19,9 +19,7 @@ function Header(){
         floater.style.setProperty("--mouse-x",x+"px")
         floater.style.setProperty("--mouse-y",y+"px")
 
-
     }
-
 
     return(
     <header>
@@ -29,14 +27,9 @@ function Header(){
         <ul className="buttons floater" onMouseMove={handleMouseMove} >
             <li><a href="/">Home</a></li>
             <li><a href="/Calculator">Calculator</a></li>
-            
         </ul>
-
-        
     </header>
     )
 }
-
-
 
 export default Header
