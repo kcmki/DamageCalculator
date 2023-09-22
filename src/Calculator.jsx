@@ -3,13 +3,13 @@ import {useState} from "react"
 
 function Calculator(){
     const champs = ["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16"]
+    const items = ["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16"]
     const [ShowChamps, setShowChamps] = useState(champs)
     const [selectedChamp, setSelectedChamp] = useState(0)
-    const [ShowItems, setShowItems] = useState([])
+    const [ShowItems, setShowItems] = useState(items)
     const [selectedItems, setSelectedItems] = useState([])
 
-    function lookchaps(event){
-        setShowChamps([event.target.value])
+    function lookchamps(event){
 
         let shown = champs.filter(champ => champ.includes(event.target.value))
 
@@ -17,20 +17,30 @@ function Calculator(){
 
     }
 
+    function lookitems(event){
+
+        let shown = items.filter(item => item.includes(event.target.value))
+
+        setShowItems(shown)
+    }
+
     return (
         <div className="Calc">
 
             <Bordered> 
-                <SearchBar onchange={lookchaps} placeholder={"Search champion"} />
-                <Selection selectables={ShowChamps} setSelected={setSelectedChamp}/>
+                <SearchBar onchange={lookchamps} placeholder={"Search champion"} />
+                <Selection type="champs" selectables={ShowChamps} setSelected={setSelectedChamp} number={1}/>
             </Bordered>
             
 
             <Bordered>
-                <SearchBar onchange={lookchaps} placeholder={"Search Items"} />
-                <Selection selectables={ShowItems} />
+                <SearchBar onchange={lookitems} placeholder={"Search Items"} />
+                <Selection type="Items" selectables={ShowItems} setSelected={setSelectedItems} number={6}/>
             </Bordered> 
+
             {selectedChamp}
+            <br/>
+            {selectedItems}
         </div>
     )
 }
@@ -43,19 +53,25 @@ function SearchBar({onchange, placeholder}){
     </div>
     )
 }
-function Selection({selectables,setSelected}){
+function Selection({type,selectables,setSelected,number}){
 
     function toggleSelected(event){
 
-        if(document.querySelector(".selected") == event.target){document.querySelector(".selected").classList.remove("selected");return}
-        if (document.querySelector(".selected") != undefined){ document.querySelector(".selected").classList.remove("selected");}
+        let cls = "."+type+" .selected";
+        let selectedItems = document.querySelectorAll(cls)
 
-        event.target.classList.toggle("selected")
-        setSelected(event.target.getAttribute("data-id"))
+        if(document.querySelector(cls) == event.target){document.querySelector(".selected").classList.remove("selected");}
+        else if (selectedItems.length === number){selectedItems[0].classList.remove("selected");event.target.classList.toggle("selected");}
+        else if (selectedItems.length < number){event.target.classList.toggle("selected");}
+
+        let newItems = []
+        document.querySelectorAll(cls).forEach((item) => {newItems.push(item.dataset.id)})
+
+        setSelected(newItems)
     }
 
     return(
-        <div className="items">
+        <div className={"items "+type}>
             {selectables.map((selectable) => (
                 <div className="item" key={selectable} data-id={selectable} onClick={toggleSelected} >
                     {selectable}
@@ -74,4 +90,6 @@ return(
     </div>
 )
 }
+
+
 export default Calculator
