@@ -51,23 +51,181 @@ div.items{
     height: 100%;
     overflow-y: auto;
 }
+    div.item{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
 
-div.item{
+        width: 70px;
+        aspect-ratio: 1 / 1;
+        position: relative;
+        margin: 5px;
+        border-radius: 10px;
+        background-color: rgba(255,255,255,.1);
+        box-shadow: 0 0 0 1px rgba(255,255,255,.1);
+        cursor: pointer;
+    }
+        .selected{
+            border: 3px solid rgba(255,255,255,.2) !important;
+            margin: 2px !important;
+            border-radius: 12px;
+
+        }
+            .selected::after{
+                content:"X";
+                font-size: 35px;
+                font-weight: bolder;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                width: 100%;
+                height: 100%;
+
+                border-radius: 7px;
+                position: absolute;
+                background-color: rgba(255,255,255,.2);
+                z-index: 5;
+                opacity: 0;
+
+                transition: 0.3s;
+            }
+            .selected:hover::after{
+                opacity: 1;
+
+                transition: 0.3s;
+            }
+.ShowSelected{
+    width: 30vw ;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+    .ShowSelected .content{
+        display: flex;
+        flex-direction: row;
+        height: max-content;
+        width: 100%;
+    }
+
+        .ShowSelected .content .sep{
+            margin: 5px;
+            display: block;
+            width: 1px;
+            background: radial-gradient(
+                farthest-corner at 50% 50%,
+                rgba(255,255,255,0.2) 00%,
+                transparent 60%
+            );
+        }
+        .ShowSelected .content .Items{
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            width: calc(50% - 5px);
+        }
+        .ShowSelected .content .Champs{
+            display: flex;
+            justify-content: center;
+            width: calc(50% - 6px);
+        }
+    .ShowSelected .calculate{
+        isolation: isolate;
+        overflow: hidden;
+        align-items: center;
+        -webkit-backdrop-filter: blur(6px);
+        backdrop-filter: blur(6px);
+        border-radius: 32px;
+        box-shadow: inset 0 -7px 11px #a48fff1f;
+        display: flex;
+        margin: 12px auto 50px;
+        padding: 12px 20px;
+        position: relative;
+
+        font-weight: bold;
+        cursor:pointer;
+
+    }
+        .ShowSelected .calculate:hover{
+            box-shadow: inset 0 -9px 11px #a48fff41;
+        }
+        .ShowSelected .calculate::after{
+            background: linear-gradient(90.01deg,rgba(229,156,255,.24) .01%,rgba(186,156,255,.24) 50.01%,rgba(156,178,255,.24) 100%);
+            border-radius: inherit;
+            content: "";
+            inset: 0;
+            -webkit-mask: linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);
+            mask: linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);
+            mask-composite: xor;
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            padding: 1px;
+            pointer-events: none;
+            position: absolute;
+        }
+
+.calculation{
+    position: absolute;
+    z-index: 12;
+    background-color: transparent;
+    width: 100vw;
+    height: 100vh;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    background: radial-gradient(37.74% 81.78% at 50% 50%,rgba(0,0,0,.9) 0%,rgba(3,0,20,0) 100%);
 
-    width: 15%;
-    aspect-ratio: 1 / 1;
-    position: relative;
-    margin: 5px;
-    border-radius: 10px;
-    background-color: rgba(255,255,255,.1);
-    box-shadow: 0 0 0 1px rgba(255,255,255,.1);
-    cursor: pointer;
+    top:-100vh;
+    left: 0px;
+    transition: 1s;
 }
+    .calculation .content{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        height: 70%;
+        width: 100%;
 
+        position: relative;
+        
+        border: 1px solid rgba(255,255,255,.1);
+
+        background: radial-gradient(71.86% 50% at 50% 0%,rgba(168,127,255,.4) 0%,rgba(168,127,255,0.2) 100%),rgba(4,1,21,.7);
+    }
+        .calculation .content .close{
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 10px;
+            width: 30px;
+            height: 30px;
+
+            position: absolute;
+            top: 0px;
+            left: calc(100% - 50px);
+        }
+
+        .calculation .content .close span{
+            width: 100%;
+            height: 5px;
+            display: block;
+            background-color: rgba(0, 0, 0,1);
+            border-radius: 5px;
+        }
+        .calculation .content .close span:nth-child(1){
+            transform: rotate(45deg) translateY(3px) translateX(1px);
+        }
+        .calculation .content .close span:nth-child(2){
+            transform: rotate(-45deg) translateY(-3px);
+        }
+.calculationTOP{
+    top: 0px;
+
+    transition: 1s;
+}
 
 
 .outer{
@@ -80,10 +238,9 @@ div.item{
     z-index: 2;
     transition: .45s cubic-bezier(.6,.6,0,1) background-color,.45s cubic-bezier(.6,.6,0,1) border-color;
 
-    height: 20vh ;
+    height: 20vh;
     width: 30vw;
 }
-
 .inner{
     -webkit-backdrop-filter: blur(15px);
     backdrop-filter: blur(15px);
@@ -98,37 +255,6 @@ div.item{
     flex-direction: column;
     align-items: center;
 }
-.selected{
-    border: 3px solid rgba(255,255,255,.2) !important;
-    margin: 2px !important;
-    border-radius: 12px;
-
-}
-.selected::after{
-    content:"X";
-    font-size: 35px;
-    font-weight: bolder;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    height: 100%;
-
-    border-radius: 7px;
-    position: absolute;
-    background-color: rgba(255,255,255,.2);
-    z-index: 5;
-    opacity: 0;
-
-    transition: 0.3s;
-}
-
-.selected:hover::after{
-    opacity: 1;
-
-    transition: 0.3s;
-}
-
 
 /* width */
 ::-webkit-scrollbar {
@@ -148,3 +274,22 @@ div.item{
   ::-webkit-scrollbar-thumb:hover {
     background: rgba(255,255,255,.3);
   }
+
+
+@media screen and (max-width:1440px){
+    .ShowSelected{
+        width: 50vw;
+    }
+    .outer{
+        width: 50vw;
+    }
+}
+
+@media screen and (max-width:1000px){
+    .ShowSelected{
+        width: 70vw;
+    }
+    .outer{
+        width: 70vw;
+    }
+}

@@ -1,13 +1,14 @@
 import "./css/Calc.css"
-import {useState} from "react"
+import {useRef, useState} from "react"
 
 function Calculator(){
     const champs = ["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16"]
     const items = ["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16"]
     const [ShowChamps, setShowChamps] = useState(champs)
-    const [selectedChamp, setSelectedChamp] = useState(0)
+    const [selectedChamp, setSelectedChamp] = useState([])
     const [ShowItems, setShowItems] = useState(items)
     const [selectedItems, setSelectedItems] = useState([])
+
 
     function lookchamps(event){
 
@@ -23,7 +24,13 @@ function Calculator(){
 
         setShowItems(shown)
     }
+    function handleCalculate(event){
+        console.log("Calculate")
 
+        if(selectedChamp.length === 0 ){alert("You have to choose a champ"); return}
+        document.querySelector(".calculation").classList.toggle("calculationTOP")
+
+    }
     return (
         <div className="Calc">
 
@@ -38,9 +45,41 @@ function Calculator(){
                 <Selection type="Items" selectables={ShowItems} setSelected={setSelectedItems} number={6}/>
             </Bordered> 
 
-            {selectedChamp}
-            <br/>
-            {selectedItems}
+
+            <div className="ShowSelected">
+                <h2>Selection</h2>
+
+                <div className="content">
+                    <div className="Champs">
+                        {selectedChamp.map((champ,key) => ( <Bordered H="60px" W="60px" margin="5px" padding="0px"  key={key}>{champ}</Bordered> ))}
+                    </div>
+                    <div className="sep"></div>
+                    <div className="Items">
+                        {selectedItems.map((item,key) => ( <Bordered H="60px" W="60px" margin="5px" padding="0px"  key={key}>{item}</Bordered> ))}
+                    </div>
+                </div>
+
+                <div className="calculate" onClick={handleCalculate}>
+                    Calculate
+                </div>
+
+
+
+
+            </div>
+            
+
+            <div className="calculation" >
+                <div className="content">
+                    <div className="close" onClick={handleCalculate}><span></span><span></span></div>
+                    {selectedChamp}
+                    <br/>
+                    {selectedItems}
+
+
+                </div>
+            </div>
+            
         </div>
     )
 }
@@ -60,7 +99,7 @@ function Selection({type,selectables,setSelected,number}){
         let cls = "."+type+" .selected";
         let selectedItems = document.querySelectorAll(cls)
 
-        if(document.querySelector(cls) == event.target){document.querySelector(".selected").classList.remove("selected");}
+        if(document.querySelector(cls) == event.target){document.querySelector(cls).classList.remove("selected");}
         else if (selectedItems.length === number){selectedItems[0].classList.remove("selected");event.target.classList.toggle("selected");}
         else if (selectedItems.length < number){event.target.classList.toggle("selected");}
 
@@ -81,15 +120,17 @@ function Selection({type,selectables,setSelected,number}){
         </div>
     )
 }
-function Bordered({children}){
+function Bordered({margin,H,W,padding,children}){
 return(
-    <div className="outer">
+    <div className="outer" style={{margin:margin,width:W,height:H,padding:padding}}>
         <div className="inner">
             {children}
         </div>
     </div>
 )
 }
+
+
 
 
 export default Calculator
