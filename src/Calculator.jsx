@@ -1,6 +1,6 @@
 import "./css/Calc.css"
 import {useRef, useState} from "react"
-
+import aph from "./assets/1053838.jpg"
 function Calculator(){
     const champs = ["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16"]
     const items = ["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16"]
@@ -25,12 +25,11 @@ function Calculator(){
         setShowItems(shown)
     }
     function handleCalculate(event){
-        console.log("Calculate")
-
         if(selectedChamp.length === 0 ){alert("You have to choose a champ"); return}
         document.querySelector(".calculation").classList.toggle("calculationTOP")
 
     }
+    let stats = {}
     return (
         <div className="Calc">
 
@@ -63,20 +62,23 @@ function Calculator(){
                     Calculate
                 </div>
 
-
-
-
             </div>
             
 
             <div className="calculation" >
                 <div className="content">
                     <div className="close" onClick={handleCalculate}><span></span><span></span></div>
-                    {selectedChamp}
-                    <br/>
-                    {selectedItems}
 
+                    <div className="SplashArt">
+                        <img src={aph} alt="Aatrox" />
+                    </div>
 
+                    <Damage selectedChamp={selectedChamp} stats={stats} />
+
+                    <div className="stats">
+                        {selectedItems}
+                    </div>
+                    
                 </div>
             </div>
             
@@ -131,6 +133,43 @@ return(
 }
 
 
+function Damage({selectedChamp,stats}){
+
+
+
+
+    return(
+        <div className="Damage">
+                        <div className="Autos dmg">
+
+                            <div className="autoContainer">
+                                <AA damage="12"/>
+                                <AA damage="12"/>
+                                <AA damage="12"/>
+                                <AA damage="12"/>
+                                <AA damage="12"/>
+                            </div>
+
+                            <div className="line"></div>
+                        </div>
+                        <div className="passif dmg"> P </div>
+                        <div className="q dmg"> Q </div>
+                        <div className="w dmg"> W </div>
+                        <div className="e dmg"> E </div>
+                        <div className="R dmg"> R </div>
+                    </div>
+    )
+}
+
+function AA({damage}){
+    return(
+    <div className="AA">
+        <div className="damage">{damage}</div>
+        <div className="circle"></div>
+        <div className="buffs"></div>
+    </div>
+    )
+    }
 
 
 export default Calculator
