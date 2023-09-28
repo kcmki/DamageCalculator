@@ -1,12 +1,13 @@
-import { useState } from 'react'
+import { useState,useContext,createContext  } from 'react'
 import {BrowserRouter,Route,Routes} from 'react-router-dom'
 import Header from './Header.jsx'
 import Home from './Home.jsx'
 import Calculator from './Calculator.jsx'
 import './css/App.css'
+import DataLoader from './KEY.js'
 
 function App() {
-	const [count, setCount] = useState(0)
+
 
 	return (
 		<>

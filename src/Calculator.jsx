@@ -1,13 +1,38 @@
 import "./css/Calc.css"
-import {useRef, useState} from "react"
+import "./css/calculation.css"
+import {useEffect, useRef, useState} from "react"
 import aph from "./assets/1053838.jpg"
+import DataLoader from "./KEY"
+
 function Calculator(){
-    const champs = ["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16"]
-    const items = ["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16"]
-    const [ShowChamps, setShowChamps] = useState(champs)
+    const loader = new DataLoader()
+	const [champs,setChamps] = useState(undefined)
+	const [items,setItems] = useState(undefined)
+
+	async function load(){
+        let version = await loader.vers
+
+        loader.fetchChamps(version,setChamps)
+		loader.fetchItems(version,setItems)
+    }
+
+
+    const [ShowChamps, setShowChamps] = useState(undefined)
     const [selectedChamp, setSelectedChamp] = useState([])
-    const [ShowItems, setShowItems] = useState(items)
+    const [ShowItems, setShowItems] = useState(undefined)
     const [selectedItems, setSelectedItems] = useState([])
+	
+
+
+    useEffect(() => {
+        if(champs === undefined || items === undefined){load()}
+        
+    }, [champs,items])
+    useEffect(() => {
+        if(ShowChamps === undefined || ShowItems === undefined){setShowItems(items),setShowChamps(champs)}
+        
+    }, [champs,items])
+
 
 
     function lookchamps(event){
@@ -17,7 +42,6 @@ function Calculator(){
         setShowChamps(shown)
 
     }
-
     function lookitems(event){
 
         let shown = items.filter(item => item.includes(event.target.value))
@@ -37,12 +61,11 @@ function Calculator(){
                 <SearchBar onchange={lookchamps} placeholder={"Search champion"} />
                 <Selection type="champs" selectables={ShowChamps} setSelected={setSelectedChamp} number={1}/>
             </Bordered>
-            
 
             <Bordered>
                 <SearchBar onchange={lookitems} placeholder={"Search Items"} />
                 <Selection type="Items" selectables={ShowItems} setSelected={setSelectedItems} number={6}/>
-            </Bordered> 
+            </Bordered>
 
 
             <div className="ShowSelected">
@@ -110,12 +133,13 @@ function Selection({type,selectables,setSelected,number}){
 
         setSelected(newItems)
     }
+    if(selectables === undefined){return(<div className={"items "+type}>Loading</div>)}
 
     return(
         <div className={"items "+type}>
-            {selectables.map((selectable) => (
-                <div className="item" key={selectable} data-id={selectable} onClick={toggleSelected} >
-                    {selectable}
+            {Object.keys(selectables).map((key) => (
+                <div className="item" key={key} data-id={selectables[key].id} onClick={toggleSelected} >
+                    {selectables[key].name}
                     {/* <img src={selectable.image} alt={selectable.name} /> */}
                 </div>
             ))}
@@ -131,8 +155,6 @@ return(
     </div>
 )
 }
-
-
 function Damage({selectedChamp,stats}){
 
 
@@ -143,14 +165,13 @@ function Damage({selectedChamp,stats}){
                         <div className="Autos dmg">
 
                             <div className="autoContainer">
-                                <AA damage="12"/>
-                                <AA damage="12"/>
-                                <AA damage="12"/>
-                                <AA damage="12"/>
-                                <AA damage="12"/>
+                                <AA damage="550" />
+                                <AA damage="500" />
+                                <AA damage="300" />
+                                <AA damage="300" />
+                                <AA damage="300" />
                             </div>
 
-                            <div className="line"></div>
                         </div>
                         <div className="passif dmg"> P </div>
                         <div className="q dmg"> Q </div>
@@ -160,16 +181,17 @@ function Damage({selectedChamp,stats}){
                     </div>
     )
 }
-
 function AA({damage}){
     return(
     <div className="AA">
         <div className="damage">{damage}</div>
         <div className="circle"></div>
-        <div className="buffs"></div>
+        <div className="buffs">
+            <div className="buff"></div>
+        </div>
     </div>
     )
-    }
+}
 
 
 export default Calculator
