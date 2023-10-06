@@ -160,3 +160,11 @@
             height: 100%;
             width: 30%;
         }
+
+
+.calculationTOP{
+    top: 0px;
+
+    transition: 1s;
+}
+        
