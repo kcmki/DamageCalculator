@@ -1,5 +1,5 @@
 .calculation{
-    position: absolute;
+    position: fixed;
     z-index: 12;
     background-color: transparent;
     width: 100vw;
@@ -60,10 +60,10 @@
         .calculation .content .SplashArt{
             height: 100%;
             width: 40%;
-            -webkit-mask-image: linear-gradient(to right, rgba(0, 0, 0, 1) 40%, rgba(238, 130, 238, 0) 95%);
-            mask-image: linear-gradient(ellipse at 0% 100%, rgba(0, 0, 0, 1) 66%, rgba(238, 130, 238, 0) 100%);
+            -webkit-mask-image: linear-gradient(to right, rgba(0, 0, 0, 1) 66%, rgba(238, 130, 238, 0) 100%);
+            mask-image: linear-gradient(to right, rgba(0, 0, 0, 1) 66%, rgba(238, 130, 238, 0) 100%);
             display: flex;
-            justify-content: center;
+            justify-content: end;
         }.calculation .content .SplashArt img{width: auto;height: 100%;}
 
 

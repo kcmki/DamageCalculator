@@ -14,8 +14,11 @@ function Calculator(){
     const [selectedChamp, setSelectedChamp] = useState([])
     const [ShowItems, setShowItems] = useState(undefined)
     const [selectedItems, setSelectedItems] = useState([])
+    const [splash, setSplash] = useState(undefined)
 
-
+    useEffect(() => {
+        setSplash(undefined)
+    },selectedChamp)
 
 	async function load(){
         let version = await loader.vers
@@ -34,8 +37,8 @@ function Calculator(){
 
 
 	
-
-
+    if(champs === undefined || items === undefined){load()}
+    
     useEffect(() => {
         if(champs === undefined || items === undefined){load()}
     }, [champs,items])
@@ -101,11 +104,11 @@ function Calculator(){
                
                 <div className="content">
                     <div className="Champs">
-                        {selectedChamp.map((champ,key) => ( <Bordered H="60px" W="60px" margin="5px" padding="0px"  key={key}>{champs[champ].name}</Bordered> ))}
+                        {selectedChamp.map((champ,key) => ( <Bordered H="80px" W="80px" margin="5px" padding="0px"  key={key}><ItemImg id={key} src={champsImg[champ]} alt={champs[champ].name} key={key} name={champs[champ].name} /></Bordered> ))}
                     </div>
                     <div className="sep"></div>
                     <div className="Items">
-                        {selectedItems.map((item,key) => ( <Bordered H="60px" W="60px" margin="5px" padding="0px"  key={key}>{items[item].name}</Bordered> ))}
+                        {selectedItems.map((item,key) => ( <Bordered H="80px" W="80px" margin="5px" padding="0px"  key={key}><ItemImg id={key} src={itemsImg[item]} alt={items[item].name} key={key} name={items[item].name} /> </Bordered> ))}
                     </div>
                 </div>
 
@@ -116,26 +119,50 @@ function Calculator(){
             </div>
             
 
-            <div className="calculation" >
-                <div className="content">
-                    <div className="close" onClick={handleCalculate}><span></span><span></span></div>
 
-                    <div className="SplashArt">
-                        <img src={aph} alt="Aatrox" />
-                    </div>
-
-                    <Damage selectedChamp={selectedChamp} stats={stats} />
-
-                    <div className="stats">
-                        {selectedItems}
-                    </div>
-                    
-                </div>
-            </div>
+            <Calculations selectedChamp={selectedChamp} selectedItems={selectedItems} champs={champs} items={items} handleCalculate={handleCalculate} setSplash={setSplash} splash={splash}/>
             
         </div>
     )
 }
+
+
+function Calculations({selectedChamp,selectedItems,handleCalculate,setSplash,splash,champs,items}){
+    let stats = {}
+    async function loadSplash(){
+        let version = await new DataLoader().vers
+        new DataLoader().fetchChampSplash(version,selectedChamp,setSplash)
+    }
+
+    useEffect(() => {
+
+        loadSplash()
+
+    },[selectedChamp])
+
+    if(!splash) return(<div className="calculation" > <div className="content" onClick={handleCalculate}> Loading... </div> </div>)
+    return (
+
+        <div className="calculation" >
+        <div className="content">
+            <div className="close" onClick={handleCalculate}><span></span><span></span></div>
+
+            <div className="SplashArt">
+                <img src={splash} alt="Aatrox" />
+            </div>
+
+            <Damage selectedChamp={selectedChamp} stats={stats} />
+
+            <div className="stats">
+                {selectedItems}
+                <br />
+            </div>
+            
+        </div>
+    </div>
+    )
+}
+
 
 function SearchBar({onchange, placeholder}){
     return(
@@ -153,11 +180,12 @@ function Selection({img,type,selectables,setSelected,number}){
         let cls = "."+type+" .selected";
         let selectedItems = document.querySelectorAll(cls)
 
-        if(document.querySelector(cls) == event.target){document.querySelector(cls).classList.remove("selected");}
-        else if (selectedItems.length === number){selectedItems[0].classList.remove("selected");event.target.classList.toggle("selected");}
-        else if (selectedItems.length < number){event.target.classList.toggle("selected");}
+        if(document.querySelector(cls) == event.currentTarget){document.querySelector(cls).classList.remove("selected");}
+        else if (selectedItems.length === number){selectedItems[0].classList.remove("selected");event.currentTarget.classList.toggle("selected");}
+        else if (selectedItems.length < number){event.currentTarget.classList.toggle("selected");}
 
         let newItems = []
+
         document.querySelectorAll(cls).forEach((item) => {newItems.push(item.dataset.id)})
 
         setSelected(newItems)
@@ -168,7 +196,7 @@ function Selection({img,type,selectables,setSelected,number}){
     return(
         <div className={"items "+type}>
             {Object.keys(selectables).map((key) => (
-                    <img className="item" onClick={toggleSelected} data-id={key} src={img[key]} alt={selectables[key].name} key={key}/>
+                    <ItemImg toggle={toggleSelected} id={key} src={img[key]} name={selectables[key].name} alt={selectables[key].name} key={key} />
             ))}
         </div>
     )
@@ -220,10 +248,12 @@ function AA({damage}){
     )
 }
 
-function itexImg({id,alt}){
+function ItemImg({toggle,id,src,alt,name}){
 
     return(
-        <img src={src} alt={alt} />
+        <div className="item hoverInfo" data-id={id} data-name={name} onClick={toggle}>
+            <img src={src} alt={alt} />
+        </div>
     )
 }
 

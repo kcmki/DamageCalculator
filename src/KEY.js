@@ -36,6 +36,12 @@ class DataLoader{
     async fetchItemIcon(version, item){
         return await fetch(itemICONS.replace("{version}", version).replace("{item}", item)).then((res) => ( res.blob())).then((res) => (URL.createObjectURL(res)))
     }
+    async fetchChampSplash(version, champ,setSplash){
+        if(!champ) return console.log("no champ")
+        if(!version) return console.log("no version")
+        if(!setSplash) return await fetch(splash.replace("{version}", version).replace("{champ}", champ)).then((res) => ( res.blob())).then((res) => (URL.createObjectURL(res)))
+        return await fetch(splash.replace("{version}", version).replace("{champ}", champ)).then((res) => ( res.blob())).then((res) => (setSplash(URL.createObjectURL(res))))
+    }
 
     async loadChampsImages(version, champs,setchamps){
         if(!champs) return console.log("no champs")
